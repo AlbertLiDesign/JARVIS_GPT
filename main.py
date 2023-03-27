@@ -8,7 +8,7 @@ if __name__ == "__main__":
     rec_time = 3 # Recording time
     speed = 180 # speeking speed
 
-    openai.api_key = "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"
+    openai.api_key = "Your API key"
     openai.organization = os.getenv("OPENAI_ORGANIZATION")
 
     conversation = []
