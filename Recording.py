@@ -1,33 +1,49 @@
 import pyaudio
 import wave
+import keyboard
+import time
 
-def RecordVoice(out_file, rec_time):
-    CHUNK = 1024
-    FORMAT = pyaudio.paInt16  # 16bit编码格式
-    CHANNELS = 1  # 单声道
-    RATE = 16000  # 16000采样频率
+def record_audio(output_filename):
+    CHUNK = 2048
+    FORMAT = pyaudio.paInt16
+    CHANNELS = 1
+    RATE = 44100
+    RECORD_SECONDS = 5
+
     p = pyaudio.PyAudio()
-    # 创建音频流
-    stream = p.open(format=FORMAT,  # 音频流wav格式
-                    channels=CHANNELS,  # 单声道
-                    rate=RATE,  # 采样率16000
+
+    stream = p.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
                     input=True,
                     frames_per_buffer=CHUNK)
-    print("Start recording...")
-    frames = []  # 录制的音频流
-    # 录制音频数据
-    for i in range(0, int(RATE / CHUNK * rec_time)):
-        data = stream.read(CHUNK)
-        frames.append(data)
-    # 录制完成
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
-    print("Done...")
-    # 保存音频文件
-    wf = wave.open(out_file, 'wb')
+
+    print("Press 'space' to speak...")
+
+    frames = []
+
+    while True:
+        if keyboard.is_pressed("space"):
+            time.sleep(0.2)  # 避免误触发，增加短暂延时
+            break
+
+    try:
+        while True:
+            data = stream.read(CHUNK, exception_on_overflow=False)
+            frames.append(data)
+            if keyboard.is_pressed("space"):
+                time.sleep(0.2)  # 避免误触发，增加短暂延时
+                break
+    finally:
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
+
+    wf = wave.open(output_filename, 'wb')
     wf.setnchannels(CHANNELS)
     wf.setsampwidth(p.get_sample_size(FORMAT))
     wf.setframerate(RATE)
     wf.writeframes(b''.join(frames))
     wf.close()
+
+    return output_filename

@@ -6,16 +6,16 @@ import VoiceSynthesis as VS
 if __name__ == "__main__":
     out_file = 'demo.wav'
     rec_time = 3 # Recording time
-    speed = 150 # speeking speed
+    speed = 180 # speeking speed
 
-    openai.api_key = "Your API key"
+    openai.api_key = "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"
     openai.organization = os.getenv("OPENAI_ORGANIZATION")
 
     conversation = []
 
     while(True):
         # Recording
-        RC.RecordVoice(out_file,rec_time)
+        RC.record_audio(out_file)
 
         # Voice recognizition
         audio_file = open(out_file, "rb")

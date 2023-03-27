@@ -1,7 +1,6 @@
 import pyttsx3
 
 def TextToVoice(answer, speed):
-    # 文本转语音
     engine = pyttsx3.init()
 
     # 获取发音人
@@ -15,7 +14,7 @@ def TextToVoice(answer, speed):
     # name = Microsoft Zira Desktop - English (United States)
 
     # 设置发音人（注意中英文）
-    engine.setProperty('voice', 'zh')
+    engine.setProperty('voice', 'com.apple.voice.enhanced.en-AU.Lee')
 
     # 改变语速  范围为0-200   默认值为200
     engine.setProperty('rate', speed)
